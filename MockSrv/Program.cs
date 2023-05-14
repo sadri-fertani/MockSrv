@@ -1,7 +1,13 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MockSrv.DTOs;
+using MockSrv.Mapper;
 using MockSrv.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder
+    .Services.AddAutoMapper(typeof(ApplicationProfile));
 
 builder
     .Services.AddDbContext<MockSrvDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -15,18 +21,32 @@ app.Run(async context =>
     using (var scope = app.Services.CreateScope())
     {
         var contextDb = scope.ServiceProvider.GetService<MockSrvDbContext>();
+        var mapper = scope.ServiceProvider.GetService<IMapper>();
 
         if (contextDb == null)
             throw new Exception("DbContext n'a pas été injecter correctement...");
 
-        var mock = await contextDb.MockRequests.FirstOrDefaultAsync(
-            m => 
-                m.RequestPath.Equals(context.Request.Path.Value) 
-                && 
+        if (mapper == null)
+            throw new Exception("Mapper n'a pas été injecter correctement...");
+
+        var request = mapper.Map<RequestDto>(context);
+
+        var mock = await contextDb.MockRequest.FirstOrDefaultAsync(
+            m =>
+                m.RequestPath.Equals(request.Path)
+                &&
+                m.RequestMethod.Equals(request.Method)
+                &&
                 (
-                    m.RequestQueryString.Equals(context.Request.QueryString.Value) 
-                    || 
-                    m.RequestQueryString == null && string.IsNullOrEmpty(context.Request.QueryString.Value)
+                    m.RequestQueryString.Equals(request.QueryString)
+                    ||
+                    m.RequestQueryString == null && string.IsNullOrEmpty(request.QueryString)
+                )
+                &&
+                (
+                    m.RequestBody.Equals(request.Body)
+                    ||
+                    m.RequestBody == null && string.IsNullOrEmpty(request.Body)
                 )
             );
 

@@ -18,7 +18,7 @@ namespace MockSrv.Models
         {
         }
 
-        public virtual DbSet<MockRequests> MockRequests { get; set; }
+        public virtual DbSet<MockRequest> MockRequest { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

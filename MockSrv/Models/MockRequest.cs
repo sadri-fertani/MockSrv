@@ -8,17 +8,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MockSrv.Models
 {
-    public partial class MockRequests
+    public partial class MockRequest
     {
         [Key]
         public int Id { get; set; }
         [Required]
         public string RequestPath { get; set; }
         public string RequestMethod { get; set; }
+        public string RequestHeaders { get; set; }
         public string RequestQueryString { get; set; }
         public string RequestBody { get; set; }
         public string ResponseBody { get; set; }
         public int ResponseStatusCode { get; set; }
         public string ResponseContentType { get; set; }
+        public string ResponseHeaders { get; set; }
     }
 }

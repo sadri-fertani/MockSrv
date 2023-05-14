@@ -15,7 +15,7 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "[dbo].[MockRequests]",
+         "Name": "[dbo].[MockRequest]",
          "ObjectType": 0
       }
    ],
