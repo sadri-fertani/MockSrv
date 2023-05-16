@@ -7,7 +7,7 @@ Pour ceux qui ne veulent pas utiliser le cloud pour une raison ou une autre, ce 
 Travaux Restants et/ou en cours :
 - Request Headers
     - &check; none
-    - &#x2610; custom
+    - &check; custom
 - Request Body
     - &check; none
     - &#x2610; form-data

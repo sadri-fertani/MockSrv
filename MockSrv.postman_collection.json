@@ -1,0 +1,440 @@
+{
+	"info": {
+		"_postman_id": "19030d5e-f279-483f-981a-59c0f222ac1e",
+		"name": "MockSrv",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "EndpointPostXml",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "",
+								"variables": ""
+							},
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7175/pxml",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"pxml"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EndpointPostJson",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Sadri\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7175/pjson",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"pjson"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EndpointPostText",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "Salut Sadri",
+							"options": {
+								"raw": {
+									"language": "html"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7175/ptxt",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"ptxt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EndpointPostHtml",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "<html>\r\n    <body>\r\n        <h1>Titre 2</h1>\r\n        <p>Ceci est un message</p>\r\n    </body>\r\n</html>",
+							"options": {
+								"raw": {
+									"language": "html"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7175/phtml",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"phtml"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Errors",
+			"item": [
+				{
+					"name": "EndpointEr401",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7175/Er401",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"Er401"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EndpointEr405",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7175/Er405",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"Er405"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EndpointNotFound",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7175/NotFound",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"NotFound"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get",
+			"item": [
+				{
+					"name": "With Querystring",
+					"item": [
+						{
+							"name": "EndpointWithQuery1",
+							"protocolProfileBehavior": {
+								"strictSSL": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7175/Query?a=b",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7175",
+									"path": [
+										"Query"
+									],
+									"query": [
+										{
+											"key": "a",
+											"value": "b"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EndpointWithQuery2",
+							"protocolProfileBehavior": {
+								"strictSSL": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7175/Query?a=c",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7175",
+									"path": [
+										"Query"
+									],
+									"query": [
+										{
+											"key": "a",
+											"value": "c"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EndpointWithQuery3",
+							"protocolProfileBehavior": {
+								"strictSSL": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7175/Query?a=b&a=po",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7175",
+									"path": [
+										"Query"
+									],
+									"query": [
+										{
+											"key": "a",
+											"value": "b"
+										},
+										{
+											"key": "a",
+											"value": "po"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "EndpointDefault",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7175/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EndpointCustom",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7175/Custom",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"Custom"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EndpointUsers",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7175/Users",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EndpointSoap",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7175/Soap",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"Soap"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Headers",
+			"item": [
+				{
+					"name": "EndpointHeader1",
+					"protocolProfileBehavior": {
+						"strictSSL": false,
+						"disabledSystemHeaders": {
+							"accept-encoding": true,
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "sf-key-02",
+								"value": "2",
+								"type": "default"
+							},
+							{
+								"key": "sf-key-01",
+								"value": "1",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7175/head1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7175",
+							"path": [
+								"head1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
