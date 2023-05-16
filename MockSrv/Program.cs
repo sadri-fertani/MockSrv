@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MockSrv.DTOs;
 using MockSrv.Mapper;
 using MockSrv.Models;
+using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.Run(async context =>
+app.Run(async contextHttp =>
 {
     using (var scope = app.Services.CreateScope())
     {
@@ -29,13 +30,19 @@ app.Run(async context =>
         if (mapper == null)
             throw new Exception("Mapper n'a pas été injecter correctement...");
 
-        var request = mapper.Map<RequestDto>(context);
+        var request = mapper.Map<RequestDto>(contextHttp);
 
         var mock = await contextDb.MockRequest.FirstOrDefaultAsync(
             m =>
                 m.RequestPath.Equals(request.Path)
                 &&
                 m.RequestMethod.Equals(request.Method)
+                &&
+                (
+                    m.RequestHeaders.Equals(request.Headers)
+                    ||
+                    m.RequestHeaders == null && string.IsNullOrEmpty(request.Headers)
+                )
                 &&
                 (
                     m.RequestQueryString.Equals(request.QueryString)
@@ -51,12 +58,19 @@ app.Run(async context =>
             );
 
         if (mock == null)
-            context.Response.StatusCode = 404;
+            contextHttp.Response.StatusCode = 404;
         else
         {
-            context.Response.StatusCode = mock.ResponseStatusCode;
-            context.Response.ContentType = mock.ResponseContentType ?? String.Empty;
-            await context.Response.WriteAsync(mock.ResponseBody ?? String.Empty);
+            contextHttp.Response.StatusCode = mock.ResponseStatusCode;
+            contextHttp.Response.ContentType = mock.ResponseContentType ?? string.Empty;
+
+            if(!string.IsNullOrEmpty(mock.ResponseHeaders))
+            {
+                foreach(var kv in mock.ResponseHeaders.Split('&').Select(m => new KeyValuePair<string, string>(m.Split('=')[0], m.Split('=')[1])))
+                    contextHttp.Response.Headers.Add(kv.Key, kv.Value);
+            }
+            
+            await contextHttp.Response.WriteAsync(mock.ResponseBody ?? string.Empty);
         }
     }
 });
