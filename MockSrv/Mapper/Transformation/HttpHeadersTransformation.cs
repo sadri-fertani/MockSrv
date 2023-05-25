@@ -10,7 +10,23 @@ namespace MockSrv.Mapper.Transformation
             StringBuilder sb = new StringBuilder("");
 
             // Filtre
-            var keys = headers.Keys.Where(k => !(new[] { "host", "user-agent", "accept", "accept-encoding", "connection", "postman-token" }).Contains(k.ToLower())).ToList();
+            var keys = headers.Keys
+                .Where(k => !(
+                new[] 
+                { 
+                    "host", 
+                    "user-agent", 
+                    "accept", 
+                    "accept-encoding", 
+                    "connection", 
+                    "postman-token", 
+                    "content-length", 
+                    "content-type" 
+                }
+                )
+                .Contains(k.ToLower()))
+                .ToList();
+
             keys.Sort();
 
             // Serialize

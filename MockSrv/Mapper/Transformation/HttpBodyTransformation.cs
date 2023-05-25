@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HtmlAgilityPack;
+using MockSrv.Extensions;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -44,6 +45,9 @@ namespace MockSrv.Mapper.Transformation
                         if (!string.IsNullOrEmpty(documentContents))
                         {
                             dynamic? obj = JsonConvert.DeserializeObject<dynamic>(documentContents);
+
+                            // Clean dynamic object
+                            obj = JsonExtensions.CleanDynamic(obj);
 
                             documentContents = JsonConvert.SerializeObject(obj);
                         }
