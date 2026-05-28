@@ -1,0 +1,96 @@
+﻿@using System.Linq;
+
+@inject LocalisationService localizer
+@inject Radzen.DialogService dialogService
+
+<RadzenStack Gap="1rem" Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Style="height: 100%;">
+    <RadzenTemplateForm TItem="MockRequestResponseModel" Data=@Model Submit=@OnSubmit EditContext="ContextEdit">
+        <RadzenFieldset AllowCollapse="true" Style="margin: 10px auto;" ExpandTitle="Expand request." CollapseTitle="Collapse request." ExpandAriaLabel="Expand request." CollapseAriaLabel="Collapse request.">
+            <HeaderTemplate>
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
+                    <RadzenIcon Icon="input" /><b>@localizer["Request"]</b>
+                </RadzenStack>
+            </HeaderTemplate>
+            <ChildContent>
+                <RadzenStack Gap="1rem" class="rz-p-sm-12">
+                    <RadzenFormField Text="@localizer["Path"]" Variant="Variant.Text" AllowFloatingLabel="false">
+                        <ChildContent>
+                            <RadzenTextBox Name="RequestPath" @bind-Value=@Model.RequestPath />
+                        </ChildContent>
+                        <Helper>
+                            <RadzenDataAnnotationValidator Component="RequestPath" Popup=true Style="position: relative" />
+                        </Helper>
+                    </RadzenFormField>
+                    <RadzenFormField Text="@localizer["Method"]" Variant="Variant.Text" AllowFloatingLabel="false">
+                        <ChildContent>
+                            <RadzenDropDown Name="RequestMethod" @bind-Value="@Model.RequestMethod" TextProperty="Text" ValueProperty="Value" Data="@(Enum.GetNames(typeof(Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpMethod)).Cast<string>().Where(t => t != "None" && t != "Custom").Select(t => new { Text = t, Value = t }))" class="rz-display-inline-flex rz-display-xl-none" />
+                        </ChildContent>
+                        <Helper>
+                            <RadzenDataAnnotationValidator Component="RequestMethod" Popup=true Style="position: relative" />
+                        </Helper>
+                    </RadzenFormField>
+                    <RadzenFormField Text="@localizer["QueryString"]" Variant="Variant.Text" AllowFloatingLabel="false">
+                        <ChildContent>
+                            <RadzenTextBox Name="RequestQueryString" @bind-Value=@Model.RequestQueryString />
+                        </ChildContent>
+                        <Helper>
+                            <RadzenDataAnnotationValidator Component="RequestQueryString" Popup=true Style="position: relative" />
+                        </Helper>
+                    </RadzenFormField>
+                    <RadzenFormField Text="@localizer["Body"]" Variant="Variant.Text" AllowFloatingLabel="false">
+                        <ChildContent>
+                            <RadzenTextArea Name="RequestBody" @bind-Value=@Model.RequestBody Cols="30" Rows="3" aria-label="RequestBody" />
+                        </ChildContent>
+                    </RadzenFormField>
+                </RadzenStack>
+            </ChildContent>
+            <SummaryTemplate>
+                <RadzenCard class="rz-mt-4">
+                    <b>@localizer["Route"] : @(string.Concat(Model.RequestPath, Model.RequestQueryString ?? ""))</b>
+                </RadzenCard>
+            </SummaryTemplate>
+        </RadzenFieldset>
+        <RadzenFieldset AllowCollapse="true" Style="margin: 40px auto;" ExpandTitle="Expand request." CollapseTitle="Collapse request." ExpandAriaLabel="Expand request." CollapseAriaLabel="Collapse request.">
+            <HeaderTemplate>
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="0.25rem">
+                    <RadzenIcon Icon="output" /><b>@localizer["Response"]</b>
+                </RadzenStack>
+            </HeaderTemplate>
+            <ChildContent>
+                <RadzenStack Gap="1rem" class="rz-p-sm-12">
+                    <RadzenFormField Text="@localizer["StatusCode"]" Variant="Variant.Text">
+                        <ChildContent>
+                            <RadzenNumeric Name="ResponseStatusCode" @bind-Value=@Model.ResponseStatusCode />
+                        </ChildContent>
+                        <Helper>
+                            <RadzenDataAnnotationValidator Component="ResponseStatusCode" Popup=true Style="position: relative" />
+                        </Helper>
+                    </RadzenFormField>
+                    <RadzenFormField Text="@localizer["ContentType"]" Variant="Variant.Text" AllowFloatingLabel="false">
+                        <ChildContent>
+                            <RadzenDropDown Name="ResponseContentType" @bind-Value="@Model.ResponseContentType" TextProperty="Text" ValueProperty="Value" Data="@((new[]{"", "application/json", "application/xml", "text/enriched", "text/xml", "text/html", "text/plain"}).Cast<string>().Select(t => new { Text = t, Value = t }))" class="rz-display-inline-flex rz-display-xl-none" />
+                        </ChildContent>
+                    </RadzenFormField>
+                    <RadzenFormField Text="@localizer["Body"]" Variant="Variant.Text" AllowFloatingLabel="false">
+                        <ChildContent>
+                            <RadzenTextArea Name="ResponseBody" @bind-Value=@Model.ResponseBody Cols="30" Rows="3" aria-label="ResponseBody" />
+                        </ChildContent>
+                        <Helper>
+                            <RadzenDataAnnotationValidator Component="ResponseBody" Popup=true Style="position: relative" />
+                        </Helper>
+                    </RadzenFormField>
+                </RadzenStack>
+            </ChildContent>
+            <SummaryTemplate>
+                <RadzenCard class="rz-mt-4">
+                    <b>@localizer["StatusCode"] : @Model.ResponseStatusCode</b>
+                </RadzenCard>
+            </SummaryTemplate>
+        </RadzenFieldset>
+        <RadzenStack Orientation="Orientation.Horizontal"  JustifyContent="JustifyContent.End" Gap="0.5rem">
+            <RadzenButton ButtonType="ButtonType.Submit" Variant="Variant.Flat" Icon="save" Text="@localizer["Save"]" Style="width: 120px" Disabled="@IsInvalid" />
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Icon="cancel" Text="@localizer["Close"]" Style="width: 120px" Click="@Close" />
+        </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenStack>
+

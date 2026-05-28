@@ -1,0 +1,19 @@
+﻿@{
+    var myContent = OriginalContent ?? string.Empty;
+    var headers = myContent.Split('&', StringSplitOptions.RemoveEmptyEntries);
+}
+
+<div style="text-align: left;">
+    @foreach (var kv in headers)
+    {
+        <div>
+            @kv
+        </div>
+    }
+</div>
+
+
+@code {
+    [Parameter]
+    public string OriginalContent { get; set; }
+}

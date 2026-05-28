@@ -1,0 +1,34 @@
+﻿@using Microsoft.Extensions.Logging
+@inject ILogger<Erreur> Logger
+
+<CascadingValue Value=this>
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Pour utiliser cette journalisation commune, il faut faire ceci :
+    /// 1. Dans votre 'Component', il faut 'injecter' le type Erreur de la façon suivante (en utilisant l'Attribut 'CascadingParameter') :
+    ///    [CascadingParameter]
+    ///    public Erreur Erreur { get; set; }
+    ///    
+    /// 2. Par la suite, dans ce même component, il faut avoir un bloc 'Try Catch' et journaliser l'erreur de la façon suivante :    
+    ////   try
+    ////   {
+    ////     //traitement....
+    ////   }
+    ////   catch (Exception ex)
+    ///    {
+    ///      Erreur.JournaliserErreur(ex);
+    ///    }           
+    /// </summary>
+    /// <param name="ex"></param>
+    public void JournaliserErreur(Exception ex)
+    {
+        //TODO : changer l'event id et/ou le message généré selon la forme désiré
+        Logger.LogError(new EventId(999), "Erreur non gérée - Type: {Type} Message: {Message}", ex.GetType(), ex.Message, ex.ToString());
+    }
+}

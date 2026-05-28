@@ -1,0 +1,40 @@
+﻿@inject IHostEnvironment Env
+@inject LocalisationService localizer
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@localizer["TitleApplication"]</title>
+    <base href="/" />
+
+    <RadzenTheme Theme="standard-dark" @rendermode="InteractiveServer" />
+
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <link rel="stylesheet" href="/css/site.css" />
+        
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
+    <script src="/js/site.js"></script>
+
+    <HeadOutlet @rendermode="InteractiveServer" />
+
+</head>
+<body>
+    <div id="blazor-error-ui">
+        @if (Env.IsDevelopment())
+        {
+            <text>
+                @localizer["InfoDevEnv"]
+            </text>
+        }
+    </div>
+
+    <Routes @rendermode="InteractiveServer" />
+       
+
+    <script src="_framework/blazor.web.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,15 @@
+﻿<Erreur>
+    <CascadingAuthenticationState>
+        <Router AppAssembly="@typeof(App).Assembly">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            </Found>
+            <NotFound>
+                <PageTitle>Page inexistante</PageTitle>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p role="alert">Le url fournis n'existe pas.</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </CascadingAuthenticationState>
+</Erreur>

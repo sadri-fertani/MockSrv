@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNetCore.DataProtection;
+@using MockSrv.Web.Modals;
+@using Microsoft.AspNetCore.Identity;
+@using System.Web;
+
+@inject NotificationService NotificationService;
+@inject DialogService DialogService;
+@inject SignInManager<IdentityUser> SignInManager;
+@inject UserManager<IdentityUser> UserManager;
+@inject ILogger<Login> Logger;
+@inject NavigationManager NavigationManager;
+@inject IDataProtectionProvider DataProtectionProvider;
+
+<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+    <RadzenTemplateForm Data=@("Login")>
+        <RadzenLogin AllowRegister="false" AllowRememberMe="false" AllowResetPassword="false" Login="@OnLogin" />
+    </RadzenTemplateForm>
+</RadzenCard>
+
+@code {
+    protected async Task OnLogin(LoginArgs args)
+    {
+        try
+        {
+            var user = await UserManager.FindByEmailAsync(args.Username);
+
+            if (user != null && await UserManager.CheckPasswordAsync(user, args.Password))
+            {
+                var token = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "SignIn");
+
+                var data = $"{user.Id}|{token}";
+
+                var parsedQuery = HttpUtility.ParseQueryString(new Uri(NavigationManager.Uri).Query);
+
+                var returnUrl = parsedQuery["returnUrl"];
+
+                if (!string.IsNullOrWhiteSpace(returnUrl))
+                    data += $"|{returnUrl}";
+
+                var protector = DataProtectionProvider.CreateProtector("SignIn");
+
+                var pdata = protector.Protect(data);
+
+                NavigationManager.NavigateTo("/account/signinactual?t=" + pdata, forceLoad: true);
+            }
+            else
+            {
+                // Notification
+                NotificationService.Notify(
+                    new NotificationMessage
+                        {
+                            Severity = NotificationSeverity.Error,
+                            Summary = "Fail login",
+                            Detail = "login/mdp error",
+                            Duration = 4000
+                        }
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error on login.");
+
+            DialogService.Close(false);
+        }
+    }
+}

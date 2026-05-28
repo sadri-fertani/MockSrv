@@ -1,0 +1,91 @@
+﻿@page "/"
+
+@using AutoMapper;
+@using MockSrv.Domain.Extensions;
+@using Refit;
+@using Microsoft.AspNetCore.Identity;
+
+@inject IMockServerApi MockServerApi;
+@inject IConfiguration Configuration;
+@inject IMapper Mapper;
+@inject ILogger<Mocks> Logger;
+@inject IJSRuntime JSRuntime
+@inject DialogService DialogService;
+@inject ContextMenuService ContextMenuService;
+@inject NotificationService NotificationService;
+@inject LocalisationService localizer;
+@inject SignInManager<IdentityUser> SignInManager;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+<RadzenStack ContextMenu=@ShowContextMenuColumnPicker>
+    <RadzenDataGrid @ref="MyGrid" Data="@RequestResponses" LoadData="@LoadData" AllowGrouping=true AllowSorting="true" AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand" 
+                    FilterMode="FilterMode.Advanced" PageSize="10" AllowPaging="true" PagerPosition="PagerPosition.Bottom" PagerHorizontalAlign="HorizontalAlign.Center" 
+                    LogicalFilterOperator="LogicalFilterOperator.Or" Style="width:auto;" HideGroupedColumn="false" AllowColumnPicking="false" AllowColumnResize="true"
+                    Render="@OnRender" AllGroupsExpanded="true" EditMode="DataGridEditMode.Single" TItem="MockRequestResponseModel" IsLoading=@IsLoading>
+        <EmptyTemplate>
+            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No records to display.</p>
+        </EmptyTemplate>
+        <HeaderTemplate>
+            <RadzenButton Visible="@IsAuthenticated" ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="@localizer["TextButtonAddMock"]" Click="@(()=> EditRow(null))" />
+        </HeaderTemplate>
+        <GroupHeaderTemplate>
+            @context.GroupDescriptor.GetTitle(): @(context.Data.Key ?? ""), @localizer["MsgNbreElementsGroup"]: @context.Data.Count
+        </GroupHeaderTemplate>
+        <Columns>
+            <RadzenDataGridColumn Property="@nameof(MockRequestResponseModel.Id)" Title="@localizer["ID"]" Visible="false" Pickable="false" />
+            <RadzenDataGridColumn Visible="@IsAuthenticated" Context="mock" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Frozen="true" Pickable="false" Width="100px" FrozenPosition="FrozenColumnPosition.Right">
+                <Template Context="mock">
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Base" Variant="Variant.Text" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@(args => EditRow(mock))" title="@localizer["Edit"]" />
+                    <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Info" Variant="Variant.Text" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@(args => DeleteRow(mock))" title="@localizer["Delete"]" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Title="@localizer["Request"]" Filterable="false">
+                <Columns>
+                    <RadzenDataGridColumn @attributes=@GetAttributes(nameof(MockRequestResponseModel.RequestPath)) Property="@nameof(MockRequestResponseModel.RequestPath)" Filterable="false" Title="@localizer["Path"]" Frozen="true" TextAlign="TextAlign.Left" MinWidth="400px">
+                        <Template Context="reqP">
+                            <div class="row">
+                                <span class="col-md-8" style="padding: 10px 10px; text-align: left;">
+                                    @((reqP as MockRequestResponseModel).RequestPath)
+                                </span>
+                                <span class="col-md-4" style="text-align: right;">
+                                    <RadzenButton 
+                                        Icon="bookmark" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.ExtraSmall" 
+                                        Click=@(args => CopyToClipBoard(@ApiTarget, (@reqP as MockRequestResponseModel).RequestPath, (@reqP as MockRequestResponseModel).RequestQueryString)) />
+                                </span>
+                            </div>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn @attributes=@GetAttributes(nameof(MockRequestResponseModel.Route)) Property="@nameof(MockRequestResponseModel.Route)" Title="@localizer["Route"]" Visible="false" Pickable="false" />
+                    <RadzenDataGridColumn @attributes=@GetAttributes(nameof(MockRequestResponseModel.RequestMethod)) Property="@nameof(MockRequestResponseModel.RequestMethod)" Title="@localizer["Method"]" Width="60px" />
+                    <RadzenDataGridColumn @attributes=@GetAttributes(nameof(MockRequestResponseModel.RequestHeaders)) Property="@nameof(MockRequestResponseModel.RequestHeaders)" Pickable="false" Visible="false" Title="@localizer["Headers"]">
+                        <Template Context="reqH">
+                            <ColumnHeaders OriginalContent="@((reqH as MockRequestResponseModel).RequestHeaders)"></ColumnHeaders>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn @attributes=@GetAttributes(nameof(MockRequestResponseModel.RequestQueryString)) Property="@nameof(MockRequestResponseModel.RequestQueryString)" Title="@localizer["QueryString"]" />
+                    <RadzenDataGridColumn @attributes=@GetAttributes(nameof(MockRequestResponseModel.RequestBody)) Property="@nameof(MockRequestResponseModel.RequestBody)" Title="@localizer["Body"]">
+                        <Template Context="reqB">
+                            <ColumnContent OriginalContent="@((reqB as MockRequestResponseModel).RequestBody)"></ColumnContent>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Title="@localizer["Response"]" Filterable="false">
+                <Columns>
+                    <RadzenDataGridColumn @attributes=@GetAttributes(nameof(MockRequestResponseModel.ResponseStatusCode)) Property="@nameof(MockRequestResponseModel.ResponseStatusCode)" Title="@localizer["StatusCode"]" Width="50px" />
+                    <RadzenDataGridColumn @attributes=@GetAttributes(nameof(MockRequestResponseModel.ResponseContentType)) Property="@nameof(MockRequestResponseModel.ResponseContentType)" Title="@localizer["ContentType"]" />
+                    <RadzenDataGridColumn @attributes=@GetAttributes(nameof(MockRequestResponseModel.ResponseHeaders)) Property="@nameof(MockRequestResponseModel.ResponseHeaders)" Pickable="false" Visible="false" Title="@localizer["Headers"]">
+                        <Template Context="resH">
+                            <ColumnHeaders OriginalContent="@((resH as MockRequestResponseModel).RequestHeaders)"></ColumnHeaders>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn @attributes=@GetAttributes(nameof(MockRequestResponseModel.ResponseBody)) Property="@nameof(MockRequestResponseModel.ResponseBody)" Title="@localizer["Body"]">
+                        <Template Context="resB">
+                            <ColumnContent OriginalContent="@((resB as MockRequestResponseModel).ResponseBody)" TypeContent="@((resB as MockRequestResponseModel).ResponseContentType)"></ColumnContent>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGridColumn>            
+        </Columns>
+    </RadzenDataGrid>
+</RadzenStack>

@@ -1,0 +1,129 @@
+##################################################################################################################
+# Cette recette permet de générer et publier un artifact correspondant à un site web Asp.NET Core utilisant Telerik et ce sans passer par le fichier de solution, 
+# mais directement avec le fichier du projet concernant l'artifact à produire.
+##################################################################################################################
+trigger:
+  branches:
+  # Indiquer ici les branches sur lesquels la génération doit s'exécuter automatiquement, vous pouvez également utiliser les "wildcard"
+  # afin de spécifier plusieurs branches, exemple : release* pour inclure toutes les branches ayant le mot "release"
+    include:
+    - main
+    - release* #Toutes les branches contenant le mot release
+  paths:    
+    # Les exclusions ne sont pas nécessaires pour éviter qu'un pipeline soit lancé en boucle, mais permettent quand même d'éviter des déclenchements inutiles lors des modifications des pipelines ou de la documentation.
+    exclude:
+    - '*.md'
+    - '*.yaml'
+    - '*.yml'
+    - '**/*.md'
+    - '**/*.yaml'
+    - '**/*.yml'
+
+##################################################################################################################
+# Spécifier l'agent à utiliser lors de la compilation (agent azure) - windows-2022 est à utilisé pour Dot Net 6
+pool:
+    vmImage: windows-2022
+
+##################################################################################################################
+# Variables utilisées dans la génération, il est fortement recommandé d'utiliser les variables pour ainsi ne pas
+# avoir à chercher des paramètres dans l'ensemble du script.
+variables:
+  solution: '**/MockSrv.Web.sln'
+  projetWeb: '**/MockSrv.Web.csproj'
+  projetTest: '**/*UnitTests.csproj'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  nomArtifact: 'MockSrv.Web'
+##################################################################################################################
+
+steps:
+#=================================================================================================================
+# Cette tâche est nécessaire afin que l'agent ait tous les éléments nécessaires afin de générer l'artifact en .Net Core
+- task: UseDotNet@2
+  displayName: 'Préparation environnement .Net Core'
+  inputs:
+    packageType: 'runtime'
+
+#=================================================================================================================
+# Préparation de l'analyse du code. ATTENTION: Cette tâche doit être appelée avant la compilation de la solution.
+# et à la CNESST.
+- task: SonarQubePrepare@4
+  displayName: 'Préparation de l''analyse du code'
+  inputs:
+    SonarQube: 'SonarQube-CNESST'
+    scannerMode: 'MSBuild'
+    projectKey: $(nomArtifact)
+    projectName: $(nomArtifact)
+    extraProperties: |
+        sonar.verbose=true
+        sonar.cs.opencover.reportsPaths="$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml"
+        sonar.cs.xunit.reportsPaths="$(Agent.BuildDirectory)/TestResult.xml"
+
+#=================================================================================================================
+# Dans le cas de nuGet venant du projet azure, il faut spécifier la restauration des paquets et leur emplacement
+# (La tâche de publication qui suit fait le restore, mais on n'a pas le choix ici de spécifier l'emplacement où aller chercher les paquets)
+# Il faut s'assurer du chemin du fichier nuget.config
+- task: DotNetCoreCLI@2
+  displayName: 'Restaurer paquets de la solution depuis Feed Artifact'
+  inputs:
+    command: 'restore'
+    projects: $(solution)
+    feedsToUse: 'config'
+    nugetConfigPath: 'MockSrv.Web/nuget.config'
+#    nugetConfigPath: 'nuget.config' #Dans cet exemple, le fichier est à la racine de la solution
+    externalFeedCredentials: 'Telerik_NuGet'
+    # Le nom par exemple 'Telerik_Nuget' est le nom du 'service connection' du projet d'équipe Azure.
+
+#=================================================================================================================
+# Cette tâche permet trois choses : récupérer les paquets nuGet, Compiler l'application et publier l'artifact.
+- task: DotNetCoreCLI@2
+  displayName: 'Restauration, génération et publication du projet'
+  inputs:
+    command: 'publish'
+    projects: $(projetWeb)
+    # Par défaut, la tâche de publication essaie de faire le travail pour toutes les applications web trouvées dans le repository,
+    # puisque l'on veut générer l'artifact pour un seul projet, il est important de spécifier le paramètre suivant :
+    publishWebProjects: false
+    zipAfterPublish: true
+    arguments: '--configuration $(buildConfiguration) --output "$(build.artifactstagingdirectory)"'
+
+#=========================================================================================================
+# Cette tâche permet de lancer l'exécution des tests et d'en afficher le résultat directement à partir du build
+- task: DotNetCoreCLI@2
+  displayName: 'Exécution des tests'
+  inputs:
+    command: 'test'
+    projects: $(projetTest)
+    configuration: $(buildConfiguration)
+    testRunTitle: 'Essai unitaire de $(nomArtifact)'
+    #les arguments suivants indiquent que l'on doit générer le rapport de couverture des tests.
+    #Faire attention avec le dernier argument, il s'agit du nom du fichier *cobertura.xml généré à la publication, et non un dossier
+    arguments: '/p:CollectCoverage=true /p:CoverletOutputFormat="cobertura%2copencover" /p:CoverletOutput="$(Build.SourcesDirectory)/TestResults/Coverage/"'
+
+#=================================================================================================================
+# Cette tâche permet de faire afficher le rapport de couverture dans le pipeline de compilation
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publication de la couverture des tests'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
+
+#=================================================================================================================
+# Procéder à l'analyse du code par SonarQube
+- task: SonarQubeAnalyze@4
+  displayName: 'Analyse statique du code'
+
+#=================================================================================================================
+# SonarQube Analysis Report
+- task: SonarQubePublish@5
+  inputs:
+    pollingTimeoutSec: '300'
+
+#=================================================================================================================
+# Cette tâche permet de publier l'artifact précédemment préparé qui pourra être utilisé subséquemment lors du "release" ou encore
+# téléchargeable dans Azure Pipeline
+- task: PublishBuildArtifacts@1
+  displayName: 'Publication de l''artifact'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: '$(nomArtifact)'

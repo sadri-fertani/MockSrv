@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "ViewAll",
+    "Projects": [
+      {
+        "Path": "MockSrv.Api\\MockSrv.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "MockSrv"
+      },
+      {
+        "Path": "MockSrv.Web\\MockSrv.Web.csproj",
+        "Action": "Start",
+        "DebugTarget": "MockSrv.Web"
+      }
+    ]
+  }
+]

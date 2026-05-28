@@ -1,0 +1,165 @@
+﻿@using System.Text
+@using System.Xml
+@using AngleSharp
+@using AngleSharp.Html
+@using AngleSharp.Html.Parser
+@using Newtonsoft.Json
+
+
+@inject TooltipService tooltipService;
+
+@{
+    var myContent = OriginalContent ?? string.Empty;
+
+    var type = TypeContent?.ToLower() switch
+    {
+        string a when a.Contains("xml") => "xml",
+        string a when a.Contains("json") => "json",
+        string a when a.Contains("html") => "html",
+        string a when a.Contains("text") => "text",
+        _ => ""
+    };
+
+    var maxLength = MaxLengthUI ?? 30;
+}
+
+<div style="text-align: left;white-space: pre-wrap;">
+    @if (myContent.Length > maxLength)
+    {
+        <span>@myContent.Substring(0, maxLength)</span>
+        <span @ref="htmlButton" @onmouseenter="@(args => ShowTooltip(htmlButton, BeautifyContent(myContent, type)))"><b>...</b></span>
+    }
+    else
+    {
+        <span>@myContent</span>
+    }
+</div>
+
+
+@code {
+    [Parameter]
+    public string OriginalContent { get; set; }
+
+    [Parameter]
+    public string TypeContent { get; set; }
+
+    [Parameter]
+    public int? MaxLengthUI { get; set; }
+
+    ElementReference htmlButton;
+
+    void ShowTooltip(ElementReference elementReference, string content, TooltipOptions options = null)
+    {
+        tooltipService.Open
+        (
+            elementReference, 
+            content.Replace(" ", "&nbsp;&nbsp;").Replace("\r\n", "<br />"),
+            options
+        );
+    }
+
+    private string BeautifyContent(string content, string type)
+    {
+        switch (type)
+        {
+            case "json":
+                return BeautifyJson(content);
+            case "xml":
+                return BeautifyXml(content);
+            case "html":
+                return BeautifyHtml(content);
+            case "text":
+                return content;
+            default:
+                {
+                    var result = content?.TrimStart() switch
+                    {
+                        string a when a.StartsWith("[") => BeautifyJson(content),
+                        string a when a.StartsWith("{") => BeautifyJson(content),
+                        string a when a.StartsWith("<!doctype html>", StringComparison.OrdinalIgnoreCase) => BeautifyHtml(content),
+                        string a when a.StartsWith("<html", StringComparison.OrdinalIgnoreCase) => BeautifyHtml(content),
+                        string a when a.StartsWith("<") => BeautifyXml(content),
+                        _ => content
+                    };
+
+                    return result;
+                }
+        }
+    }
+
+    private string BeautifyJson(string content)
+    {
+        try
+        {
+            return JsonConvert.SerializeObject(
+                        JsonConvert.DeserializeObject<object>(content),
+                        Newtonsoft.Json.Formatting.Indented);
+        }
+        catch
+        {
+            return content;
+        }
+    }
+
+    private string BeautifyXml(string xmlString)
+    {
+        MemoryStream mStream = new MemoryStream();
+        XmlTextWriter writer = new XmlTextWriter(mStream, Encoding.Unicode);
+        XmlDocument document = new XmlDocument();
+
+        try
+        {
+            // Load the XmlDocument with the XML.
+            document.LoadXml(xmlString);
+
+            writer.Formatting = System.Xml.Formatting.Indented;
+
+            // Write the XML into a formatting XmlTextWriter
+            document.WriteContentTo(writer);
+            writer.Flush();
+            mStream.Flush();
+
+            // Have to rewind the MemoryStream in order to read its contents.
+            mStream.Position = 0;
+
+            // Read MemoryStream contents into a StreamReader.
+            StreamReader sReader = new StreamReader(mStream);
+
+            // Extract the text from the StreamReader.
+            return sReader.ReadToEnd();
+        }
+        catch
+        {
+            return xmlString;
+        }
+        finally
+        {
+            mStream.Close();
+            writer.Close();
+        }
+    }
+
+    private string BeautifyHtml(string htmlString)
+    {
+        try
+        {
+            // Create an AngleSharp configuration
+            var config = Configuration.Default.WithDefaultLoader();
+
+            // Create browser session using config
+            var context = BrowsingContext.New(config);
+
+            // Load HTML into Anglesharp
+            var document = context.OpenAsync(req => req.Content(htmlString)).Result;
+
+            var sw = new StringWriter();
+            document.ToHtml(sw, new PrettyMarkupFormatter());
+
+            return sw.ToString();
+        }
+        catch
+        {
+            return htmlString;
+        }
+    }
+}
