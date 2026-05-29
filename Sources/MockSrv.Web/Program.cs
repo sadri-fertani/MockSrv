@@ -75,7 +75,7 @@ builder.Services
     .AddRefitClient<IMockServerApi>(new RefitSettings { ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings()) })
     .ConfigureHttpClient(c =>
     {
-        c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("Api:Admin"));
+        c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("Api:Admin")!);
     })
     .ConfigurePrimaryHttpMessageHandler(() =>
     {

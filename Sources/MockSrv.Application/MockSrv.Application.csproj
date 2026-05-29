@@ -15,6 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\MockSrv.Common\MockSrv.Common.csproj" />
 		<ProjectReference Include="..\MockSrv.Domain\MockSrv.Domain.csproj" />
 	</ItemGroup>
 

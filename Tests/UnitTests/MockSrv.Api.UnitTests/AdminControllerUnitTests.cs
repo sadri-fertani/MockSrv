@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using MockSrv.Api.Controllers;
 using MockSrv.Application.DTOs;
 using MockSrv.Application.Interfaces.Services;
-using MockSrv.Domain.Globals;
+using MockSrv.Common.Globals;
 using Moq;
 
 namespace MockSrv.Api.UnitTests;

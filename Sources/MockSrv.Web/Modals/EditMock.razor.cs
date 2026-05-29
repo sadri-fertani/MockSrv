@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using MockSrv.Application.DTOs;
-using MockSrv.Domain.Extensions;
-using MockSrv.Domain.Globals;
+using MockSrv.Common.Extensions;
+using MockSrv.Common.Globals;
+using MockSrv.Web.Dtos;
 using MockSrv.Web.Models;
 using MockSrv.Web.Services;
 
@@ -12,40 +12,41 @@ namespace MockSrv.Web.Modals;
 public partial class EditMock
 {
     [Inject]
-    public IMockServerApi MockServerApi { get; set; }
+    public IMockServerApi? MockServerApi { get; set; }
 
     [Inject]
-    public IMapper Mapper { get; set; }
+    public IMapper? Mapper { get; set; }
 
     [Inject]
-    public ILogger<EditMock> Logger { get; set; }
+    public ILogger<EditMock>? Logger { get; set; }
 
     [Parameter]
-    public MockRequestResponseModel CurrentMock { get; set; }
+    public MockRequestResponseModel? CurrentMock { get; set; }
 
     [Parameter]
     public TypeOperationEdition ActionEdition { get; set; }
 
-    private RetourEditionModel Resultat { get; set; }
+    private RetourEditionModel? Resultat { get; set; }
 
-    private EditContext ContextEdit;
+    private EditContext? ContextEdit;
     private bool IsInvalid { get; set; }
 
-    private MockRequestResponseModel Model { get; set; }
+    private MockRequestResponseModel? Model { get; set; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Model = CurrentMock.Clone() as MockRequestResponseModel;
+        Model = CurrentMock?.Clone() as MockRequestResponseModel;
 
         // Init retour
-        Resultat = new RetourEditionModel();
-
-        // Mode : Creation / Mise a jour / Clone
-        Resultat.TypeOperation = ActionEdition;
+        Resultat = new RetourEditionModel
+        {
+            // Mode : Creation / Mise a jour / Clone
+            TypeOperation = ActionEdition
+        };
 
         // Init context editor
-        ContextEdit = new(Model);
+        ContextEdit = new(Model!);
 
         // Init Model validation
         IsInvalid = ActionEdition == TypeOperationEdition.Creation;
@@ -93,12 +94,11 @@ public partial class EditMock
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error {OnSubmit}", nameof(OnSubmit));
+            Logger?.LogError(ex, "Error {OnSubmit}", nameof(OnSubmit));
             Resultat.Exception = true;
 
             if (((Refit.ApiException)ex).Content == ErrorCodes.DUPLICATE_REQUEST)
                 Resultat.Message = localizer["MsgErrorDuplicated"];
-
             dialogService.Close(Resultat);
         }
     }

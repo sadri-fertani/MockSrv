@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Dynamic;
 
-namespace MockSrv.Domain.Extensions;
+namespace MockSrv.Common.Extensions;
 
 public static class JsonExtensions
 {
@@ -141,4 +141,5 @@ public static class JsonExtensions
             expandoDict.Add(propertyName, propertyValue);
     }
 }
+
 

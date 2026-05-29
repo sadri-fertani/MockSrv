@@ -49,7 +49,7 @@
 </RadzenLayout>
 
 @code {
-    private ErrorBoundary errorBoundary;
+    private ErrorBoundary? errorBoundary;
     private bool sidebar1Expanded = true;
     private bool isAuthenticated = false;
 
@@ -57,7 +57,7 @@
     {
         base.OnInitialized();
 
-        isAuthenticated = SignInManager.IsSignedIn(HttpContextAccessor.HttpContext.User);
+        isAuthenticated = SignInManager.IsSignedIn(HttpContextAccessor.HttpContext?.User!);
     }
 
     async Task OpenLoginModal()

@@ -38,17 +38,17 @@
 
 @code {
     [Parameter]
-    public string OriginalContent { get; set; }
+    public string?   OriginalContent { get; set; }
 
     [Parameter]
-    public string TypeContent { get; set; }
+    public string? TypeContent { get; set; }
 
     [Parameter]
     public int? MaxLengthUI { get; set; }
 
     ElementReference htmlButton;
 
-    void ShowTooltip(ElementReference elementReference, string content, TooltipOptions options = null)
+    void ShowTooltip(ElementReference elementReference, string content, TooltipOptions? options = null)
     {
         tooltipService.Open
         (
@@ -82,7 +82,7 @@
                         _ => content
                     };
 
-                    return result;
+                    return result!;
                 }
         }
     }

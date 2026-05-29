@@ -22,9 +22,9 @@
     {
         try
         {
-            var user = await UserManager.FindByEmailAsync(args.Username);
+            var user = await UserManager.FindByEmailAsync(args.Username!);
 
-            if (user != null && await UserManager.CheckPasswordAsync(user, args.Password))
+            if (user != null && await UserManager.CheckPasswordAsync(user, args.Password!))
             {
                 var token = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "SignIn");
 

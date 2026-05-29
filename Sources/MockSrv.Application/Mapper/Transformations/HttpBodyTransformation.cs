@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MockSrv.Domain.Extensions;
+using MockSrv.Common.Extensions;
 
 namespace MockSrv.Application.Mapper.Transformations;
 

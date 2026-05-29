@@ -11,34 +11,34 @@ public class MockRequestResponseModel : ICloneable
     public int Id { get; set; }
 
     [Display(Name = nameof(Messages.ApiNameDisplay), ResourceType = typeof(Messages))]
-    public string ApiName { get; set; }
+    public string? ApiName { get; set; }
 
     [Display(Name = nameof(Messages.ApiRouteDisplay), ResourceType = typeof(Messages))]
-    public string Route { get; set; }
+    public string? Route { get; set; }
 
     [Required]
     [RegularExpression(@"^\/[\w\.]+(\/[\w\.]+)+", ErrorMessageResourceName = "RequestPathInvalid", ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Messages.RequestPathDisplay), ResourceType = typeof(Messages))]
-    public string RequestPath { get; set; }
+    public string? RequestPath { get; set; }
 
     [Required]
     [Display(Name = nameof(Messages.RequestMethodDisplay), ResourceType = typeof(Messages))]
-    public string RequestMethod { get; set; }
+    public string? RequestMethod { get; set; }
 
     [CustomValidation(typeof(MockRequestResponseModel), nameof(ValidateHeaders), ErrorMessageResourceName = "RequestHeadersInvalid", ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Messages.RequestHeadersDisplay), ResourceType = typeof(Messages))]
-    public string RequestHeaders { get; set; }
+    public string? RequestHeaders { get; set; }
 
     [RegularExpression(@"^\?[\w]+=[\w]+(&[\w]+=[\w]+)*$", ErrorMessageResourceName = "RequestQueryStringInvalid", ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Messages.RequestQueryStringDisplay), ResourceType = typeof(Messages))]
-    public string RequestQueryString { get; set; }
+    public string? RequestQueryString { get; set; }
 
     [Display(Name = nameof(Messages.RequestBodyDisplay), ResourceType = typeof(Messages))]
-    public string RequestBody { get; set; }
+    public string? RequestBody { get; set; }
 
     [CustomValidation(typeof(MockRequestResponseModel), nameof(ValidateBody), ErrorMessageResourceName = "ResponseBodyInvalid", ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Messages.ResponseBodyDisplay), ResourceType = typeof(Messages))]
-    public string ResponseBody { get; set; }
+    public string? ResponseBody { get; set; }
 
     [Required]
     [Display(Name = nameof(Messages.ResponseStatusCodeDisplay), ResourceType = typeof(Messages))]
@@ -46,11 +46,11 @@ public class MockRequestResponseModel : ICloneable
     public int ResponseStatusCode { get; set; }
 
     [Display(Name = nameof(Messages.ResponseContentTypeDisplay), ResourceType = typeof(Messages))]
-    public string ResponseContentType { get; set; }
+    public string? ResponseContentType { get; set; }
 
     [CustomValidation(typeof(MockRequestResponseModel), nameof(ValidateHeaders), ErrorMessageResourceName = "ResponseHeadersInvalid", ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Messages.ResponseHeadersDisplay), ResourceType = typeof(Messages))]
-    public string ResponseHeaders { get; set; }
+    public string? ResponseHeaders { get; set; }
 
     public object Clone()
     {
@@ -63,14 +63,14 @@ public class MockRequestResponseModel : ICloneable
         {
             if (model.ResponseContentType != null)
             {
-                if (model.ResponseContentType.Contains("json", StringComparison.CurrentCultureIgnoreCase) && !model.ResponseBody.IsValidJson())
+                if (model.ResponseContentType.Contains("json", StringComparison.CurrentCultureIgnoreCase) && !(model.ResponseBody!.IsValidJson()))
                     return new ValidationResult(null, [nameof(ResponseBody), nameof(ResponseContentType)]);
-                if (model.ResponseContentType.Contains("xml", StringComparison.CurrentCultureIgnoreCase) && !model.ResponseBody.IsValidXml())
+                if (model.ResponseContentType.Contains("xml", StringComparison.CurrentCultureIgnoreCase) && !(model.ResponseBody!.IsValidXml()))
                     return new ValidationResult(null, [nameof(ResponseBody), nameof(ResponseContentType)]);
             }
         }
 
-        return ValidationResult.Success;
+        return ValidationResult.Success!;
     }
 
     public static ValidationResult ValidateHeaders(string value, ValidationContext context)
@@ -83,7 +83,7 @@ public class MockRequestResponseModel : ICloneable
             bool isMatch = Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase);
 
             if (!isMatch)
-                return new ValidationResult(null, [context.MemberName]);
+                return new ValidationResult(null, [context.MemberName!]);
             else
             {
                 var keys = new List<string>();
@@ -96,11 +96,11 @@ public class MockRequestResponseModel : ICloneable
 
                 if (keys.Distinct().Count() != keys.Count)
                 {
-                    return new ValidationResult(localizer["MsgErrorHeadersKeysDuplicated"], [context.MemberName]);
+                    return new ValidationResult(localizer["MsgErrorHeadersKeysDuplicated"], [context.MemberName!]);
                 }
             }
         }
 
-        return ValidationResult.Success;
+        return ValidationResult.Success!;
     }
 }

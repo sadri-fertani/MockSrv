@@ -6,7 +6,7 @@ namespace MockSrv.Web.Services;
 
 public class LocalisationService
 {
-    private readonly IStringLocalizer _localizer;
+    private readonly IStringLocalizer? _localizer;
     public LocalisationService(IStringLocalizerFactory factory)
     {
         var assembly = typeof(RessourcesPartagees).GetTypeInfo();

@@ -1,15 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MockSrv.Domain.Entities;
+namespace MockSrv.Web.Dtos;
 
-[Table("MockRequest")]
-public partial class MockEntity
+public class MockRequestResponseDto
 {
-    [Key]
     public int Id { get; set; }
 
-    public string? HashKey { get; set; }
+    public string? ApiName { get; set; }
+
+    public string? Route { get; set; }
 
     public required string RequestPath { get; set; }
 
@@ -23,10 +22,10 @@ public partial class MockEntity
 
     public string? ResponseBody { get; set; }
 
+    [Range(100, 599)]
     public required int ResponseStatusCode { get; set; }
 
     public string? ResponseContentType { get; set; }
 
     public string? ResponseHeaders { get; set; }
 }
-

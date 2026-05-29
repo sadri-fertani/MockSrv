@@ -10,10 +10,10 @@ namespace MockSrv.Web.Pages.Accueil;
 
 public partial class Mocks
 {
-    private string ApiTarget => Configuration.GetValue<string>("Api:IHM");
+    private string? ApiTarget => Configuration.GetValue<string>("Api:IHM");
 
-    private IEnumerable<MockRequestResponseModel> RequestResponses;
-    private RadzenDataGrid<MockRequestResponseModel> MyGrid;
+    private IEnumerable<MockRequestResponseModel>? RequestResponses;
+    private RadzenDataGrid<MockRequestResponseModel>? MyGrid;
 
     private bool IsLoading = false;
     private bool IsAuthenticated = false;
@@ -22,7 +22,7 @@ public partial class Mocks
     /// Stores the set of selected column property names.
     /// When null - all columns are selected.
     /// </summary>
-    private HashSet<string> selectedColumns;
+    private HashSet<string>? selectedColumns;
 
     protected override async Task OnInitializedAsync()
     {
@@ -187,7 +187,7 @@ public partial class Mocks
     {
         var result = await DialogService.OpenAsync<EditMock>(
             row is null ? localizer["TitleModalNewMock"] : localizer["TitleModalUpdateMock"],
-            new Dictionary<string, object>()
+            new Dictionary<string, object?>()
             {
                 {
                     "CurrentMock", row ?? new MockRequestResponseModel { }
@@ -228,7 +228,7 @@ public partial class Mocks
                         {
                             Severity = NotificationSeverity.Error,
                             Summary = localizer["Error"],
-                            Detail = retourEdition.Message,
+                            Detail = retourEdition.Message!,
                             Duration = 4000
                         }
                     );

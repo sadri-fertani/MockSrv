@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>14521381-a4cd-4bd3-a343-d1afc5857236</UserSecretsId>
 	</PropertyGroup>
@@ -34,7 +35,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\MockSrv.Application\MockSrv.Application.csproj" />
+	  <ProjectReference Include="..\MockSrv.Common\MockSrv.Common.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

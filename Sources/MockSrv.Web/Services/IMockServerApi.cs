@@ -1,4 +1,4 @@
-﻿using MockSrv.Application.DTOs;
+﻿using MockSrv.Web.Dtos;
 using Refit;
 
 namespace MockSrv.Web.Services;

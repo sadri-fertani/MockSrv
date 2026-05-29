@@ -1,4 +1,4 @@
-﻿namespace MockSrv.Domain.Globals;
+﻿namespace MockSrv.Common.Globals;
 
 public static class ErrorCodes
 {

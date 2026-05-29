@@ -3,11 +3,11 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-namespace MockSrv.Domain.Extensions;
+namespace MockSrv.Common.Extensions;
 
 public static class StringExtensions
 {
-    public static string? Clean(this string str) 
+    public static string? Clean(this string str)
     {
         if (str != null && str.Length > 0)
         {
@@ -92,3 +92,4 @@ public static class StringExtensions
         return string.Concat(documentContents.Split('\n'));
     }
 }
+

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MockSrv.Application.DTOs;
+using MockSrv.Web.Dtos;
 using MockSrv.Web.Models;
 
 namespace MockSrv.Web.Mapper;

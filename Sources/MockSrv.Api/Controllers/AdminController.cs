@@ -5,7 +5,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using MockSrv.Application.DTOs;
 using MockSrv.Application.Interfaces.Services;
-using MockSrv.Domain.Globals;
+using MockSrv.Common.Globals;
 
 namespace MockSrv.Api.Controllers;
 
