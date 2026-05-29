@@ -18,7 +18,7 @@ public static class SqlExceptionFactory
         c = typeof(SqlError).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance);
         var nineC = c.FirstOrDefault(f => f.GetParameters().Length == 9)!;
         
-        SqlError sqlError = (nineC.Invoke(new object?[] { number, (byte)0, (byte)0, "", "", "", (int)0, (uint)0, innerEx }) as SqlError)!;
+        SqlError sqlError = (nineC.Invoke([number, (byte)0, (byte)0, "", "", "", (int)0, (uint)0, innerEx]) as SqlError)!;
         errorList.Add(sqlError);
         
         SqlException ex = (Activator.CreateInstance
@@ -26,13 +26,12 @@ public static class SqlExceptionFactory
                 typeof(SqlException), 
                 BindingFlags.NonPublic | BindingFlags.Instance, 
                 null, 
-                new object?[] 
-                { 
+                [ 
                     "test", 
                     errors,
                     innerEx, 
                     Guid.NewGuid() 
-                }, 
+                ], 
                 null
             ) as SqlException)!;
         

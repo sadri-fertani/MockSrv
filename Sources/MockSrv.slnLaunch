@@ -3,9 +3,9 @@
     "Name": "ViewAll",
     "Projects": [
       {
-        "Path": "MockSrv.Api\\MockSrv.Api.csproj",
+        "Path": "MockSrv.Startup\\MockSrv.Startup.csproj",
         "Action": "Start",
-        "DebugTarget": "MockSrv"
+        "DebugTarget": "MockSrv.Api"
       },
       {
         "Path": "MockSrv.Web\\MockSrv.Web.csproj",

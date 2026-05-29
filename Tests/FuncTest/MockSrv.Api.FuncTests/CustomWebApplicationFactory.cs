@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using MockSrv.Application.Interfaces.DbContextes;
+using MockSrv.Common.Logging;
 using MockSrv.Persistence.DbContexts;
 
 namespace MockSrv.Api.FuncTests;
@@ -53,7 +53,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 .GetRequiredService<IApplicationDbContext>();
 
             var logger = scopedServices
-                .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+                .GetRequiredService<ISanitizedLogger<CustomWebApplicationFactory<TStartup>>>();
 
             // Ensure the database is created.
             db.Database.EnsureCreated();
@@ -65,7 +65,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "An error occurred seeding the database with test messages. Error: {Message}", ex.Message);
+                logger.Error(ex, "An error occurred seeding the database with test messages. Error: {Message}", ex.Message);
             }
         }
 

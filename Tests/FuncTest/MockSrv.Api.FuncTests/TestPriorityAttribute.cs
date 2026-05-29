@@ -1,12 +1,7 @@
 ﻿namespace MockSrv.Api.FuncTests;
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-public class TestPriorityAttribute : Attribute
+public class TestPriorityAttribute(int priority) : Attribute
 {
-    public TestPriorityAttribute(int priority)
-    {
-        Priority = priority;
-    }
-
-    public int Priority { get; private set; }
+    public int Priority { get; private set; } = priority;
 }

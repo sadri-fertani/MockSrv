@@ -365,3 +365,7 @@ FodyWeavers.xsd
 *.db
 *.db-*
 
+# Application Logs
+Sources/MockSrv.Api/Logs/
+Sources/MockSrv.Web/Logs/
+

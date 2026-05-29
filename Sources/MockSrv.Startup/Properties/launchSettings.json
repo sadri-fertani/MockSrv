@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": true,
@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "MockSrv": {
+    "MockSrv.Api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,

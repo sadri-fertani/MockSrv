@@ -14,6 +14,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="[8.0.27, 9.0.0)" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="[8.0.27, 9.0.0)" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="[8.0.27, 9.0.0)" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="[8.0.27, 9.0.0)" />
@@ -32,8 +33,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Sources\MockSrv.Api\MockSrv.Api.csproj" />
 		<ProjectReference Include="..\..\..\Sources\MockSrv.Application\MockSrv.Application.csproj" />
+		<ProjectReference Include="..\..\..\Sources\MockSrv.Startup\MockSrv.Startup.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

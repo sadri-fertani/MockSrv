@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using MockSrv.Application.Mapper;
 using MockSrv.Application.Services;
+using MockSrv.Common.Logging;
 using MockSrv.Web.FuncTests.DbContextes;
 using Moq;
 
@@ -14,6 +15,7 @@ public class UnitTestMockService
     {
         // Arrange
         var mockLogger = new Mock<ILogger<MockRequestResponseService>>();
+        var mockSanitizedLogger = new Mock<ISanitizedLogger<MockRequestResponseService>>();
         var mockLoggerFactory = new Mock<ILoggerFactory>();
         mockLoggerFactory
             .Setup(f => f.CreateLogger(It.IsAny<string>()))
@@ -29,7 +31,7 @@ public class UnitTestMockService
 
         var service = new MockRequestResponseService
             (
-            mockLogger.Object,
+            mockSanitizedLogger.Object,
             mapper,
             dbContext
             );
@@ -46,6 +48,7 @@ public class UnitTestMockService
     {
         // Arrange
         var mockLogger = new Mock<ILogger<MockRequestResponseService>>();
+        var mockSanitizedLogger = new Mock<ISanitizedLogger<MockRequestResponseService>>();
         var mockLoggerFactory = new Mock<ILoggerFactory>();
         mockLoggerFactory
             .Setup(f => f.CreateLogger(It.IsAny<string>()))
@@ -61,7 +64,7 @@ public class UnitTestMockService
 
         var service = new MockRequestResponseService
             (
-            mockLogger.Object,
+            mockSanitizedLogger.Object,
             mapper,
             dbContext
             );

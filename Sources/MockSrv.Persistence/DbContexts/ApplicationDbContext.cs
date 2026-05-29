@@ -22,19 +22,9 @@ public partial class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         modelBuilder.Entity<MockEntity>(entity =>
         {
-            if (this.Database.IsSqlServer())
-            {
-                entity
-                    .Property(e => e.HashKey)
-                    .HasComputedColumnSql("(CONVERT([varchar](256), hashbytes('SHA2_256', [RequestPath] + [RequestMethod] + ISNULL([RequestHeaders], '') + ISNULL([RequestQueryString], '') + ISNULL([RequestBody], '')), (2)))", true);
-            }
-
-            if (this.Database.IsSqlite())
-            {
-                entity
-                    .Property(e => e.HashKey)
-                    .HasComputedColumnSql("([RequestPath] || [RequestMethod] || IFNULL([RequestHeaders], '') || IFNULL([RequestQueryString], '') || IFNULL([RequestBody], ''))", true);
-            }
+            entity
+                .Property(e => e.HashKey)
+                .HasComputedColumnSql("([RequestPath] || [RequestMethod] || IFNULL([RequestHeaders], '') || IFNULL([RequestQueryString], '') || IFNULL([RequestBody], ''))", true);
 
             entity
                 .HasIndex(u => u.HashKey)

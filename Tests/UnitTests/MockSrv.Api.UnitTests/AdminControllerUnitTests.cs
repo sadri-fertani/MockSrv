@@ -7,6 +7,7 @@ using MockSrv.Api.Controllers;
 using MockSrv.Application.DTOs;
 using MockSrv.Application.Interfaces.Services;
 using MockSrv.Common.Globals;
+using MockSrv.Common.Logging;
 using Moq;
 
 namespace MockSrv.Api.UnitTests;
@@ -18,7 +19,7 @@ public class AdminControllerUnitTests
     public async Task Test_GetAll_Return_List_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         mockRequestService
@@ -48,7 +49,7 @@ public class AdminControllerUnitTests
     public async Task Test_GetAll_Return_NotFound_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         mockRequestService
@@ -74,7 +75,7 @@ public class AdminControllerUnitTests
     public async Task Test_GetAll_Return_ThrowException_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         mockRequestService
@@ -101,7 +102,7 @@ public class AdminControllerUnitTests
     public async Task Test_GetOne_Return_OK_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         var expected = new MockRequestResponseDto
@@ -142,7 +143,7 @@ public class AdminControllerUnitTests
     public async Task Test_GetOne_Return_NotFound_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         mockRequestService
@@ -168,7 +169,7 @@ public class AdminControllerUnitTests
     public async Task Test_GetOne_Return_ThrowException_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         mockRequestService
@@ -195,7 +196,7 @@ public class AdminControllerUnitTests
     public async Task Test_Post_Return_New_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         var expectedIn = new MockRequestResponseDto
@@ -245,7 +246,7 @@ public class AdminControllerUnitTests
     public async Task Test_Post_ThrowException_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         var expected = new MockRequestResponseDto
@@ -280,53 +281,10 @@ public class AdminControllerUnitTests
     }
 
     [Fact]
-    public async Task Test_Post_ThrowSqlExceptionAsInnerException_Async()
-    {
-        // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
-        var mockRequestService = new Mock<IMockRequestResponseService>();
-
-        var expected = new MockRequestResponseDto
-        {
-            Id = 1,
-            ApiName = "Test",
-            RequestBody = "",
-            RequestMethod = "Get",
-            RequestPath = "/",
-            ResponseBody = "",
-            ResponseContentType = "application/json",
-            ResponseStatusCode = 200,
-            RequestQueryString = "",
-            Route = ""
-        };
-
-        var expectedException = new DbUpdateException
-            (
-                "Duplicate key",
-                SqlExceptionFactory.Create(ErrorCodes.CODE_DUPLICATE_KEY_SQLSERVER)
-            );
-
-        mockRequestService
-            .Setup(r => r.AddAsync(It.IsAny<MockRequestResponseDto>())).Throws(expectedException);
-
-        var controller = new AdminController(
-            mockLogger.Object,
-            mockRequestService.Object);
-
-        // Act
-        var result = await controller.PostAsync(expected);
-
-        // Assert
-        Assert.NotNull(result);
-        var objectResult = Assert.IsType<ObjectResult>(result.Result);
-        Assert.Equal(StatusCodes.Status500InternalServerError, objectResult.StatusCode);
-    }
-
-    [Fact]
     public async Task Test_Post_ThrowSqliteExceptionAsInnerException_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         var expected = new MockRequestResponseDto
@@ -371,7 +329,7 @@ public class AdminControllerUnitTests
     public async Task Test_Put_Return_Notfound_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         mockRequestService
@@ -392,7 +350,7 @@ public class AdminControllerUnitTests
     public async Task Test_Put_ThrowException_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         var expected = new MockRequestResponseDto
@@ -434,7 +392,7 @@ public class AdminControllerUnitTests
     public async Task Test_Delete_Return_NoContent_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         mockRequestService
@@ -456,7 +414,7 @@ public class AdminControllerUnitTests
     public async Task Test_Delete_Return_ThrowException_Async()
     {
         // Arrange
-        var mockLogger = new Mock<ILogger<AdminController>>();
+        var mockLogger = new Mock<ISanitizedLogger<AdminController>>();
         var mockRequestService = new Mock<IMockRequestResponseService>();
 
         mockRequestService

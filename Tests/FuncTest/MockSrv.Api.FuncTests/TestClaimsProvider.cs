@@ -13,7 +13,7 @@ public class TestClaimsProvider
 
     public TestClaimsProvider()
     {
-        Claims = new List<Claim>();
+        Claims = [];
     }
 
     public static TestClaimsProvider? WithAnonymousUserClaims()

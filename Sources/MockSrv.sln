@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockSrv.Api", "MockSrv.Api\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{75224709-2B35-48D6-B52F-D23860941AB8}"
 	ProjectSection(SolutionItems) = preProject
-		MockSrv.Api.build.yaml = MockSrv.Api.build.yaml
-		MockSrv.Web.build.yaml = MockSrv.Web.build.yaml
 		..\Scripts\MockSrvDb.sql = ..\Scripts\MockSrvDb.sql
 		..\README.md = ..\README.md
 	EndProjectSection
@@ -41,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockSrv.Web.FuncTests", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSrv.Api.UnitTests", "..\Tests\UnitTests\MockSrv.Api.UnitTests\MockSrv.Api.UnitTests.csproj", "{52400C25-37F5-456D-B7FF-DC753DA3DDC3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{DB61D92F-12C7-4770-B72A-30A60B6F317D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Common", "_Common", "{DB61D92F-12C7-4770-B72A-30A60B6F317D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSrv.Common", "MockSrv.Common\MockSrv.Common.csproj", "{0A5367E1-BF06-4F54-B5D7-EF85E17E1A4E}"
 EndProject
@@ -52,6 +50,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{50E89464-7810-4295-90BE-53B4324ABA4E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Startup", "Startup", "{9AC87C9C-5454-42F2-A86A-9B21AF873F69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSrv.Startup", "MockSrv.Startup\MockSrv.Startup.csproj", "{AF551E15-DDC7-4496-89CC-CDC16DB2A6D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Analyzers", "_Analyzers", "{7247A4E5-5F76-4B6B-B4E4-4E32C3E0C79F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSrv.Analyzers", "MockSrv.Analyzers\MockSrv.Analyzers.csproj", "{8188BADE-BCF4-4A37-B87D-BC672EE4A124}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSrv.Analyzers.UnitTests", "..\Tests\UnitTests\MockSrv.Analyzers.UnitTests\MockSrv.Analyzers.UnitTests.csproj", "{C465FE07-C446-4828-8CCE-C6AF18016D5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +101,18 @@ Global
 		{0A5367E1-BF06-4F54-B5D7-EF85E17E1A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A5367E1-BF06-4F54-B5D7-EF85E17E1A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A5367E1-BF06-4F54-B5D7-EF85E17E1A4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF551E15-DDC7-4496-89CC-CDC16DB2A6D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF551E15-DDC7-4496-89CC-CDC16DB2A6D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF551E15-DDC7-4496-89CC-CDC16DB2A6D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF551E15-DDC7-4496-89CC-CDC16DB2A6D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8188BADE-BCF4-4A37-B87D-BC672EE4A124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8188BADE-BCF4-4A37-B87D-BC672EE4A124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8188BADE-BCF4-4A37-B87D-BC672EE4A124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8188BADE-BCF4-4A37-B87D-BC672EE4A124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C465FE07-C446-4828-8CCE-C6AF18016D5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C465FE07-C446-4828-8CCE-C6AF18016D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C465FE07-C446-4828-8CCE-C6AF18016D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C465FE07-C446-4828-8CCE-C6AF18016D5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +137,10 @@ Global
 		{922BEA4F-1D54-4510-90F2-C05E45583A3C} = {651245BB-EDD9-43AE-A8BD-3196E343B4E7}
 		{50E89464-7810-4295-90BE-53B4324ABA4E} = {922BEA4F-1D54-4510-90F2-C05E45583A3C}
 		{9AC87C9C-5454-42F2-A86A-9B21AF873F69} = {18A280CA-DB5D-44F3-9388-16CD8C6BBE52}
+		{AF551E15-DDC7-4496-89CC-CDC16DB2A6D2} = {9AC87C9C-5454-42F2-A86A-9B21AF873F69}
+		{7247A4E5-5F76-4B6B-B4E4-4E32C3E0C79F} = {651245BB-EDD9-43AE-A8BD-3196E343B4E7}
+		{8188BADE-BCF4-4A37-B87D-BC672EE4A124} = {7247A4E5-5F76-4B6B-B4E4-4E32C3E0C79F}
+		{C465FE07-C446-4828-8CCE-C6AF18016D5E} = {A5609B26-9068-4320-AC8A-F7AD018B618D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ADFAC50F-3840-45F7-8D0A-7560AE6ABE8A}

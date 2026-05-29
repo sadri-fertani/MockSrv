@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using MockSrv.Application.DTOs;
 using MockSrv.Application.Interfaces.Services;
 using MockSrv.Common.Globals;
+using MockSrv.Common.Logging;
 
 namespace MockSrv.Api.Controllers;
 
 [Authorize]
 [Route("[controller]")]
 [ApiController]
-public class AdminController(ILogger<AdminController> logger, IMockRequestResponseService mockRequestResponseService) : ControllerBase
+public class AdminController(ISanitizedLogger<AdminController> logger, IMockRequestResponseService mockRequestResponseService) : ControllerBase
 {
     /// <summary>
     /// Retourne un MockRequest par son id
@@ -34,7 +35,7 @@ public class AdminController(ILogger<AdminController> logger, IMockRequestRespon
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error {GetOneAsync}", nameof(GetOneAsync));
+            logger.Error(ex, "Error {GetOneAsync}", nameof(GetOneAsync));
 
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
         }
@@ -58,7 +59,7 @@ public class AdminController(ILogger<AdminController> logger, IMockRequestRespon
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error {GetAllAsync}", nameof(GetAllAsync));
+            logger.Error(ex, "Error {GetAllAsync}", nameof(GetAllAsync));
 
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
         }
@@ -80,20 +81,15 @@ public class AdminController(ILogger<AdminController> logger, IMockRequestRespon
             return CreatedAtAction(nameof(GetOneAsync), new { id = newModel.Id }, newModel);
         }
         catch (DbUpdateException ex)
-        when
-        (
-            (ex.InnerException is SqliteException eSqlLite && eSqlLite.SqliteExtendedErrorCode == ErrorCodes.CODE_DUPLICATE_KEY_SQLLITE)
-            ||
-            (ex.InnerException is SqlException eSqlServer && eSqlServer.Number == ErrorCodes.CODE_DUPLICATE_KEY_SQLSERVER)
-        )
+        when (ex.InnerException is SqliteException eSqlLite && eSqlLite.SqliteExtendedErrorCode == ErrorCodes.CODE_DUPLICATE_KEY_SQLLITE)
         {
-            logger.LogError(ex, "Error {PostAsync}", nameof(PostAsync));
+            logger.Error(ex, "Error {PostAsync}", nameof(PostAsync));
 
             return StatusCode(StatusCodes.Status500InternalServerError, ErrorCodes.DUPLICATE_REQUEST);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error {PostAsync}", nameof(PostAsync));
+            logger.Error(ex, "Error {PostAsync}", nameof(PostAsync));
 
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
         }
@@ -111,17 +107,17 @@ public class AdminController(ILogger<AdminController> logger, IMockRequestRespon
         try
         {
             var mock = await mockRequestResponseService.GetAsync(model!.Id);
-            
-            if (mock == null) 
+
+            if (mock == null)
                 return NotFound($"Le MockRequest ayant l'id: {model!.Id} est introuvable.");
-            
+
             await mockRequestResponseService.UpdateAsync(model);
 
             return Ok(model);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error {PutAsync}", nameof(PutAsync));
+            logger.Error(ex, "Error {PutAsync}", nameof(PutAsync));
 
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
         }
@@ -149,7 +145,7 @@ public class AdminController(ILogger<AdminController> logger, IMockRequestRespon
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error {DeleteAsync}", nameof(DeleteAsync));
+            logger.Error(ex, "Error {DeleteAsync}", nameof(DeleteAsync));
 
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
         }

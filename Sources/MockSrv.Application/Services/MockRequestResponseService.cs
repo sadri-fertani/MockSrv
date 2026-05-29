@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using MockSrv.Application.DTOs;
 using MockSrv.Application.Interfaces.DbContextes;
 using MockSrv.Application.Interfaces.Services;
+using MockSrv.Common.Logging;
 using MockSrv.Domain.Entities;
 
 namespace MockSrv.Application.Services;
@@ -12,12 +12,12 @@ public class MockRequestResponseService : IMockRequestResponseService
 {
     protected IApplicationDbContext _applicationDbContexte;
 
-    protected ILogger<MockRequestResponseService> _logger;
+    protected ISanitizedLogger<MockRequestResponseService> _logger;
 
     protected IMapper _mapper;
 
     public MockRequestResponseService(
-        ILogger<MockRequestResponseService> logger,
+        ISanitizedLogger<MockRequestResponseService> logger,
         IMapper mapper,
         IApplicationDbContext applicationDbContexte)
     {
