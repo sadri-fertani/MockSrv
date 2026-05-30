@@ -15,7 +15,7 @@
                 <RadzenStack Gap="1rem" class="rz-p-sm-12">
                     <RadzenFormField Text="@localizer["Path"]" Variant="Variant.Text" AllowFloatingLabel="false">
                         <ChildContent>
-                            <RadzenTextBox Name="RequestPath" @bind-Value=@Model.RequestPath />
+                            <RadzenTextBox Name="RequestPath" @bind-Value=@Model!.RequestPath />
                         </ChildContent>
                         <Helper>
                             <RadzenDataAnnotationValidator Component="RequestPath" Popup=true Style="position: relative" />
@@ -23,7 +23,7 @@
                     </RadzenFormField>
                     <RadzenFormField Text="@localizer["Method"]" Variant="Variant.Text" AllowFloatingLabel="false">
                         <ChildContent>
-                            <RadzenDropDown Name="RequestMethod" @bind-Value="@Model.RequestMethod" TextProperty="Text" ValueProperty="Value" Data="@(Enum.GetNames(typeof(Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpMethod)).Cast<string>().Where(t => t != "None" && t != "Custom").Select(t => new { Text = t, Value = t }))" class="rz-display-inline-flex rz-display-xl-none" />
+                            <RadzenDropDown Name="RequestMethod" @bind-Value="@Model!.RequestMethod" TextProperty="Text" ValueProperty="Value" Data="@(Enum.GetNames(typeof(HttpMethod)).Cast<string>().Where(t => t != "None" && t != "Custom").Select(t => new { Text = t, Value = t }))" class="rz-display-inline-flex rz-display-xl-none" />
                         </ChildContent>
                         <Helper>
                             <RadzenDataAnnotationValidator Component="RequestMethod" Popup=true Style="position: relative" />
@@ -31,7 +31,7 @@
                     </RadzenFormField>
                     <RadzenFormField Text="@localizer["QueryString"]" Variant="Variant.Text" AllowFloatingLabel="false">
                         <ChildContent>
-                            <RadzenTextBox Name="RequestQueryString" @bind-Value=@Model.RequestQueryString />
+                            <RadzenTextBox Name="RequestQueryString" @bind-Value=@Model!.RequestQueryString />
                         </ChildContent>
                         <Helper>
                             <RadzenDataAnnotationValidator Component="RequestQueryString" Popup=true Style="position: relative" />
@@ -39,14 +39,14 @@
                     </RadzenFormField>
                     <RadzenFormField Text="@localizer["Body"]" Variant="Variant.Text" AllowFloatingLabel="false">
                         <ChildContent>
-                            <RadzenTextArea Name="RequestBody" @bind-Value=@Model.RequestBody Cols="30" Rows="3" aria-label="RequestBody" />
+                            <RadzenTextArea Name="RequestBody" @bind-Value=@Model!.RequestBody Cols="30" Rows="3" aria-label="RequestBody" />
                         </ChildContent>
                     </RadzenFormField>
                 </RadzenStack>
             </ChildContent>
             <SummaryTemplate>
                 <RadzenCard class="rz-mt-4">
-                    <b>@localizer["Route"] : @(string.Concat(Model.RequestPath, Model.RequestQueryString ?? ""))</b>
+                    <b>@localizer["Route"] : @(string.Concat(Model!.RequestPath, Model!.RequestQueryString ?? ""))</b>
                 </RadzenCard>
             </SummaryTemplate>
         </RadzenFieldset>
@@ -60,7 +60,7 @@
                 <RadzenStack Gap="1rem" class="rz-p-sm-12">
                     <RadzenFormField Text="@localizer["StatusCode"]" Variant="Variant.Text">
                         <ChildContent>
-                            <RadzenNumeric Name="ResponseStatusCode" @bind-Value=@Model.ResponseStatusCode />
+                            <RadzenNumeric Name="ResponseStatusCode" @bind-Value=@Model!.ResponseStatusCode />
                         </ChildContent>
                         <Helper>
                             <RadzenDataAnnotationValidator Component="ResponseStatusCode" Popup=true Style="position: relative" />
@@ -68,12 +68,12 @@
                     </RadzenFormField>
                     <RadzenFormField Text="@localizer["ContentType"]" Variant="Variant.Text" AllowFloatingLabel="false">
                         <ChildContent>
-                            <RadzenDropDown Name="ResponseContentType" @bind-Value="@Model.ResponseContentType" TextProperty="Text" ValueProperty="Value" Data="@((new[]{"", "application/json", "application/xml", "text/enriched", "text/xml", "text/html", "text/plain"}).Cast<string>().Select(t => new { Text = t, Value = t }))" class="rz-display-inline-flex rz-display-xl-none" />
+                            <RadzenDropDown Name="ResponseContentType" @bind-Value="@Model!.ResponseContentType" TextProperty="Text" ValueProperty="Value" Data="@((new[]{"", "application/json", "application/xml", "text/enriched", "text/xml", "text/html", "text/plain"}).Cast<string>().Select(t => new { Text = t, Value = t }))" class="rz-display-inline-flex rz-display-xl-none" />
                         </ChildContent>
                     </RadzenFormField>
                     <RadzenFormField Text="@localizer["Body"]" Variant="Variant.Text" AllowFloatingLabel="false">
                         <ChildContent>
-                            <RadzenTextArea Name="ResponseBody" @bind-Value=@Model.ResponseBody Cols="30" Rows="3" aria-label="ResponseBody" />
+                            <RadzenTextArea Name="ResponseBody" @bind-Value=@Model!.ResponseBody Cols="30" Rows="3" aria-label="ResponseBody" />
                         </ChildContent>
                         <Helper>
                             <RadzenDataAnnotationValidator Component="ResponseBody" Popup=true Style="position: relative" />
@@ -83,7 +83,7 @@
             </ChildContent>
             <SummaryTemplate>
                 <RadzenCard class="rz-mt-4">
-                    <b>@localizer["StatusCode"] : @Model.ResponseStatusCode</b>
+                    <b>@localizer["StatusCode"] : @Model!.ResponseStatusCode</b>
                 </RadzenCard>
             </SummaryTemplate>
         </RadzenFieldset>

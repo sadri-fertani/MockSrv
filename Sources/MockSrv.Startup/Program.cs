@@ -2,6 +2,7 @@
 using MockSrv.Application;
 using MockSrv.Common.Logging;
 using MockSrv.Persistence;
+using MockSrv.Persistence.DbContexts;
 using Serilog;
 
 namespace MockSrv.Startup;
@@ -30,7 +31,10 @@ public class Program
                 .AddSanitizedLogger()
                 .AddPersistence(builder.Configuration)
                 .AddApplication(builder.Configuration)
-                .AddPresentation(builder.Configuration);
+                .AddPresentation(builder.Configuration)
+                .AddHealthChecks()
+                .AddSqlite(builder.Configuration.GetConnectionString($"DefaultConnection")!, healthQuery: "SELECT 1;", name: "Bilan de santé de la base de donnée")
+                .AddDbContextCheck<ApplicationDbContext>("Bilan de santé du DbContext");
 
             var app = builder.Build();
 

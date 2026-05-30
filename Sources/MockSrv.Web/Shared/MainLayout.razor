@@ -37,7 +37,7 @@
                 <ErrorContent Context="Exception">
                     <div class="alert bg-danger text-white alert-dismissible">
                         @Exception.GetType(): @Exception.Message
-                        <button class="btn-close" @onclick="@errorBoundary.Recover"></button>
+                        <button class="btn-close" @onclick="@errorBoundary!.Recover"></button>
                     </div>
                 </ErrorContent>
             </ErrorBoundary>

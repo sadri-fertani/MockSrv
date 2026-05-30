@@ -146,7 +146,7 @@ public partial class Mocks
                 new ConfirmOptions() { OkButtonText = localizer["Yes"], CancelButtonText = localizer["No"] }
             );
 
-        if (result.Value)
+        if (result.HasValue && result.Value)
         {
             try
             {

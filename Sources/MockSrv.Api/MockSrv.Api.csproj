@@ -7,19 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.Sqlite" Version="9.0.0" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.10" />
     <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.3.10" />
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="[8.0.27, 9.0.0)" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.27" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="8.0.27" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MockSrv.Analyzers\MockSrv.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\MockSrv.Application\MockSrv.Application.csproj" />
     <ProjectReference Include="..\MockSrv.Common\MockSrv.Common.csproj" />
-    <ProjectReference Include="..\MockSrv.Persistence\MockSrv.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

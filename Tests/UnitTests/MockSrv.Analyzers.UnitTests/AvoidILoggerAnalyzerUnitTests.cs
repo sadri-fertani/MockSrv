@@ -2,14 +2,13 @@
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
-using Xunit;
 
 namespace MockSrv.Analyzers.UnitTests;
 
 public class AvoidILoggerAnalyzerUnitTests
 {
-    [Fact]
     [Obsolete]
+    [Fact]
     public async Task AvoidILoggerAnalyzer_Should_Report_Diagnostic_When_ILogger_Is_Used()
     {
         var testCode = @"
@@ -48,6 +47,7 @@ public class MyClass
         await test.RunAsync();
     }
 
+    [Obsolete]
     [Fact]
     public async Task AvoidILoggerAnalyzer_Should_Not_Report_Diagnostic_When_ILogger_Is_Used_In_SanitizedLogger_Class()
     {

@@ -7,6 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockSrv.Api", "MockSrv.Api\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{75224709-2B35-48D6-B52F-D23860941AB8}"
 	ProjectSection(SolutionItems) = preProject
+		ARCHITECTURE.md = ARCHITECTURE.md
 		..\Scripts\MockSrvDb.sql = ..\Scripts\MockSrvDb.sql
 		..\README.md = ..\README.md
 	EndProjectSection

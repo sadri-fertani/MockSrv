@@ -1,8 +1,6 @@
 ﻿@page "/"
 
 @using AutoMapper;
-@using MockSrv.Common.Extensions;
-@using Refit;
 @using Microsoft.AspNetCore.Identity;
 
 @inject IMockServerApi MockServerApi;
@@ -26,10 +24,10 @@
             <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No records to display.</p>
         </EmptyTemplate>
         <HeaderTemplate>
-            <RadzenButton Visible="@IsAuthenticated" ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="@localizer["TextButtonAddMock"]" Click="@(()=> EditRow(null))" />
+            <RadzenButton Visible="@IsAuthenticated" ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="@localizer["TextButtonAddMock"]" Click="@(()=> EditRow(null!))" />
         </HeaderTemplate>
         <GroupHeaderTemplate>
-            @context.GroupDescriptor.GetTitle(): @(context.Data.Key ?? ""), @localizer["MsgNbreElementsGroup"]: @context.Data.Count
+            @context.GroupDescriptor?.GetTitle(): @(context.Data.Key ?? ""), @localizer["MsgNbreElementsGroup"]: @context.Data.Count
         </GroupHeaderTemplate>
         <Columns>
             <RadzenDataGridColumn Property="@nameof(MockRequestResponseModel.Id)" Title="@localizer["ID"]" Visible="false" Pickable="false" />
@@ -50,7 +48,7 @@
                                 <span class="col-md-4" style="text-align: right;">
                                     <RadzenButton 
                                         Icon="bookmark" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.ExtraSmall" 
-                                        Click=@(args => CopyToClipBoard(@ApiTarget, (@reqP as MockRequestResponseModel).RequestPath, (@reqP as MockRequestResponseModel).RequestQueryString)) />
+                                        Click=@(args => CopyToClipBoard(@ApiTarget!, (@reqP as MockRequestResponseModel).RequestPath!, (@reqP as MockRequestResponseModel).RequestQueryString!)) />
                                 </span>
                             </div>
                         </Template>
